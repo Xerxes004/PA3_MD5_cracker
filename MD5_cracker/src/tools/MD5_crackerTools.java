@@ -5,11 +5,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
-/**
- *
- * @author wes
- */
 public class MD5_crackerTools {
+    
+    
+    
     /**
      * String to be turned into an MD5-hash string
      * @param inputString
@@ -45,5 +44,7 @@ public class MD5_crackerTools {
                NoSuchAlgorithmException ex) {
             return null;
         }   
-    }    
+    }
+    
+    
 }
