@@ -32,6 +32,11 @@ public class MD5_crackerTools {
             crackedPassword = (MD5guessLength1.equals(passwordHash) ? plainGuessLength1 : null);
             
             foundPassword = crackedPassword != null;
+        }
+        
+        for (int i = 0; i < possibleChars.length && !foundPassword; i++) 
+        {
+            String plainGuessLength1 = possibleChars[i];
             
             for (int j = 0; j < possibleChars.length && !foundPassword; j++) 
             {
@@ -41,6 +46,16 @@ public class MD5_crackerTools {
                 crackedPassword = (guessLength2.equals(passwordHash) ? plainGuessLength2 : null);
                 
                 foundPassword = crackedPassword != null;
+            }
+        }
+        
+        for (int i = 0; i < possibleChars.length && !foundPassword; i++) 
+        {
+            String plainGuessLength1 = possibleChars[i];
+            
+            for (int j = 0; j < possibleChars.length && !foundPassword; j++) 
+            {
+                String plainGuessLength2 = plainGuessLength1 + possibleChars[j];
                 
                 for (int k = 0; k < possibleChars.length && !foundPassword; k++) 
                 {
@@ -50,6 +65,21 @@ public class MD5_crackerTools {
                     crackedPassword = (guessLength3.equals(passwordHash) ? plainGuessLength3 : null);
                     
                     foundPassword = crackedPassword != null;
+                }
+            }
+        }
+        
+        for (int i = 0; i < possibleChars.length && !foundPassword; i++) 
+        {
+            String plainGuessLength1 = possibleChars[i];
+            
+            for (int j = 0; j < possibleChars.length && !foundPassword; j++) 
+            {
+                String plainGuessLength2 = plainGuessLength1 + possibleChars[j];
+                
+                for (int k = 0; k < possibleChars.length && !foundPassword; k++) 
+                {
+                    String plainGuessLength3 = plainGuessLength2 + possibleChars[k];
                     
                     for (int l = 0; l < possibleChars.length && !foundPassword; l++) 
                     {
@@ -59,6 +89,26 @@ public class MD5_crackerTools {
                         crackedPassword = (guessLength4.equals(passwordHash) ? plainGuessLength4 : null);
 
                         foundPassword = crackedPassword != null;
+                    }
+                }
+            }
+        }
+        
+        for (int i = 0; i < possibleChars.length && !foundPassword; i++) 
+        {
+            String plainGuessLength1 = possibleChars[i];
+            
+            for (int j = 0; j < possibleChars.length && !foundPassword; j++) 
+            {
+                String plainGuessLength2 = plainGuessLength1 + possibleChars[j];
+                
+                for (int k = 0; k < possibleChars.length && !foundPassword; k++) 
+                {
+                    String plainGuessLength3 = plainGuessLength2 + possibleChars[k];
+                    
+                    for (int l = 0; l < possibleChars.length && !foundPassword; l++) 
+                    {
+                        String plainGuessLength4 = plainGuessLength3 + possibleChars[l];
                         
                         for (int m = 0; m < possibleChars.length && !foundPassword; m++) 
                         {

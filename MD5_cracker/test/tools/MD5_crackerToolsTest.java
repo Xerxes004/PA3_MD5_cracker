@@ -12,12 +12,12 @@ public class MD5_crackerToolsTest {
     @Test
     public void testPermutationBruteForce() {
         System.out.println("permutationBruteForce");
-        String passwordHash = "827ccb0eea8a706c4c34a16891f84e7b";
+        String passwordHash = "f3abb86bd34cf4d52698f14c0da1dc60";
         String passwordSalt = "";
-        String expResult = "12345";
+        String expResult = "zzz";
         String result = MD5_crackerTools.permutationBruteForce(passwordHash, passwordSalt);
-        System.out.println("Expected: " + expResult);
-        System.out.println("  Actual: " + result);
+        System.out.println("Expected password: " + expResult);
+        System.out.println("  Actual password: " + result);
         Assert.assertEquals(expResult, result);
         System.out.println("-----------------------------------");
     }
