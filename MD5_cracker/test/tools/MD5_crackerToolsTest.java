@@ -5,26 +5,20 @@
  */
 package tools;
 
+import org.junit.Assert;
 import org.junit.Test;
 
-/**
- *
- * @author wes
- */
 public class MD5_crackerToolsTest {
-
     @Test
-    public void testGetMD5bytes() {
-        System.out.println("Unit Test: getMD5bytes");
-        String MD5input = "12";
-        System.out.println("Hashing: " + MD5input);
-        
-        String expectedResult = "c20ad4d76fe97759aa27a0c99bff6710";
-        String actualResult = MD5_crackerTools.getMD5hashString(MD5input);
-
-        System.out.println("Found   : " + actualResult);
-        System.out.println("Expected: " + expectedResult);
-
-        assert(expectedResult.equals(actualResult));    
-    }   
+    public void testPermutationBruteForce() {
+        System.out.println("permutationBruteForce");
+        String passwordHash = "827ccb0eea8a706c4c34a16891f84e7b";
+        String passwordSalt = "";
+        String expResult = "12345";
+        String result = MD5_crackerTools.permutationBruteForce(passwordHash, passwordSalt);
+        System.out.println("Expected: " + expResult);
+        System.out.println("  Actual: " + result);
+        Assert.assertEquals(expResult, result);
+        System.out.println("-----------------------------------");
+    }
 }
