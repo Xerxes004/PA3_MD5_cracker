@@ -5,6 +5,7 @@ package ui;
 import exceptions.DictionaryNotFoundException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Date;
 import tools.DataBundle;
 import tools.MD5crackerTools;
 
@@ -14,6 +15,10 @@ import tools.MD5crackerTools;
  */
 public class main {
     public static void main (String[] args) {
+        //This is to get the start time
+        Date time = new Date();
+        long firstTime = time.getTime();
+        
         File hashes = new File("D:\\Dropbox\\Cedarville\\2-Sophomore\\Spring 2015\\Computer Security\\Programming Projects\\Proj 3\\pa3hashes.txt");
         File dictionary = new File("D:\\Dropbox\\Cedarville\\2-Sophomore\\Spring 2015\\Computer Security\\Programming Projects\\Proj 3\\Bible.txt");
         
@@ -41,5 +46,11 @@ public class main {
         catch(FileNotFoundException ex) {
             
         }
+        
+        //This is to get the final time and print it out
+        Date newTime = new Date();
+        long secondTime = newTime.getTime();
+        long finishTime = secondTime - firstTime;
+        System.out.println("The runtime was " + finishTime + " ms.");
     }
 }
