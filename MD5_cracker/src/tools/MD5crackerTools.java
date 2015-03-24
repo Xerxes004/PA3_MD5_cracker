@@ -12,6 +12,16 @@ import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 public class MD5crackerTools {
     
+    /**
+     * Performs a dictionary and brute-force attack on an MD5-hashed password
+     * using the specified dictionary
+     * @param hash MD5-hash to attack
+     * @param salt
+     * @param dictionary
+     * @return
+     * @throws DictionaryNotFoundException
+     * @throws FileNotFoundException 
+     */
     public static String fullAttack(String hash, String salt, File dictionary) 
             throws DictionaryNotFoundException,
                    FileNotFoundException
@@ -53,93 +63,30 @@ public class MD5crackerTools {
         HashMap<String, String> map = new HashMap();
         
         while (dictionaryScanner.hasNext()) {
-            String nextWord = dictionaryScanner.next();
+            String nextWord = dictionaryScanner.next().toLowerCase().trim();
             
             for (int i = 0; i < nextWord.length(); i++) {
                 if (!Character.isLetterOrDigit(nextWord.charAt(i))) {
-                    nextWord = nextWord.substring(0, i + 1).toLowerCase().trim();
-                    map.put(nextWord, nextWord);
-                    break;
+                    nextWord = nextWord.replace(nextWord.charAt(i), ' ');
                 }
             }
+            nextWord = nextWord.toLowerCase().trim();
+            map.put(nextWord, nextWord);
             
-            String dictionaryWordHash = getMD5hashString(nextWord + passwordSalt);
+            String dictionaryWordHash = null;
             
-            if (!map.containsKey(dictionaryWordHash)) {
-                if (dictionaryWordHash.equals(passwordHash)) {
-                    return nextWord;
+            if (nextWord.length() > 5) {
+                dictionaryWordHash = getMD5hashString(nextWord + passwordSalt);
+            
+                if (!map.containsKey(dictionaryWordHash)) {
+                    if (dictionaryWordHash.equals(passwordHash)) {
+                        return nextWord;
+                    }
                 }
             }
         }
         
         return null;
-    }
-    
-    /**
-     * Parses the hash file which has lines formatted like this:
-     *     username:salt:MD5hash
-     * @param hashFile file to be parsed
-     * @return DataBundle object that contains the usernames, salts, and hashes
-     * @throws FileNotFoundException 
-     */
-    public static DataBundle parseHashFile(File hashFile) 
-            throws FileNotFoundException 
-    {
-        final int dataLength = countLines(hashFile);
-        
-        String[] userNames = new String[dataLength];
-        String[] salts     = new String[dataLength];
-        String[] MD5hashes = new String[dataLength];
-        
-        if (!hashFile.canRead()) {
-            throw new FileNotFoundException();
-        }
-        
-        Scanner dictionaryScanner = new Scanner(hashFile, "UTF-8");
-        
-        int i = 0;
-        
-        while(dictionaryScanner.hasNextLine()) {
-            //  Splits the line at each ":" and stores each chunk in a String[]
-            String[] fields = dictionaryScanner.nextLine().split(":");
-            
-            //  username:salt:MD5hash
-            //  field[0]:field[1]:field[2]
-            userNames[i] = fields[0].toLowerCase().trim();
-            salts[i]     = fields[1].toLowerCase().trim();
-            MD5hashes[i] = fields[2].toLowerCase().trim();
-            /*
-            System.out.println("User: " + userNames[i]);
-            System.out.println("Hash: " + salts[i]);
-            System.out.println("Pass: " + MD5hashes[i]);
-            System.out.println("----------------------------------");
-            */
-            
-            i++;
-        }
-        
-        return new DataBundle(userNames, salts, MD5hashes);
-    }
-    
-    /**
-     * Counts the lines of a file
-     * @param file to have its lines read
-     * @return number of lines in file
-     * @throws FileNotFoundException 
-     */
-    private static int countLines(File file) 
-            throws FileNotFoundException 
-    {
-        Scanner scanner = new Scanner(file);
-        
-        int i = 0;
-        while (scanner.hasNextLine()) {
-            scanner.nextLine();
-            i++;
-        }
-        scanner.close();
-        
-        return i;
     }
     
     /**
@@ -242,6 +189,67 @@ public class MD5crackerTools {
         }
         
         return crackedPassword;
+    }
+    
+    /**
+     * Parses the hash file which has lines formatted like this:
+     *     username:salt:MD5hash
+     * @param hashFile file to be parsed
+     * @return DataBundle object that contains the usernames, salts, and hashes
+     * @throws FileNotFoundException 
+     */
+    public static DataBundle parseHashFile(File hashFile) 
+            throws FileNotFoundException 
+    {
+        final int dataLength = countLines(hashFile);
+        
+        String[] userNames = new String[dataLength];
+        String[] salts     = new String[dataLength];
+        String[] MD5hashes = new String[dataLength];
+        
+        if (!hashFile.canRead()) {
+            throw new FileNotFoundException();
+        }
+        
+        Scanner dictionaryScanner = new Scanner(hashFile, "UTF-8");
+        
+        int i = 0;
+        
+        while(dictionaryScanner.hasNextLine()) {
+            //  Splits the line at each ":" and stores each chunk in a String[]
+            String[] fields = dictionaryScanner.nextLine().split(":");
+            
+            //  username:salt:MD5hash
+            //  field[0]:field[1]:field[2]
+            userNames[i] = fields[0].toLowerCase().trim();
+            salts[i]     = fields[1].toLowerCase().trim();
+            MD5hashes[i] = fields[2].toLowerCase().trim();
+            
+            i++;
+        }
+        
+        return new DataBundle(userNames, salts, MD5hashes);
+    }
+    
+    /**
+     * Counts the lines of a file
+     * @param file to have its lines read
+     * @return number of lines in file
+     * @throws FileNotFoundException 
+     */
+    private static int countLines(File file) 
+            throws FileNotFoundException 
+    {
+        Scanner scanner = new Scanner(file);
+        
+        int i = 0;
+        while (scanner.hasNextLine()) {
+            scanner.nextLine();
+            i++;
+        }
+        scanner.close();
+        
+        return i;
     }
     
     /**

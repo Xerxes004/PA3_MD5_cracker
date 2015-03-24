@@ -14,9 +14,10 @@ import tools.MD5crackerTools;
  */
 public class main {
     public static void main (String[] args) {
-        File hashes = new File("D:\\Dropbox\\Cedarville\\2-Sophomore\\Spring 2015\\Computer Security\\Programming Projects\\Proj 3\\pa3hashes.txt");
-        File dictionary = new File("D:\\Dropbox\\Cedarville\\2-Sophomore\\Spring 2015\\Computer Security\\Programming Projects\\Proj 3\\Bible.txt");
-        
+        //File hashes = new File("D:\\Dropbox\\Cedarville\\2-Sophomore\\Spring 2015\\Computer Security\\Programming Projects\\Proj 3\\pa3hashes.txt");
+        //File dictionary = new File("D:\\Dropbox\\Cedarville\\2-Sophomore\\Spring 2015\\Computer Security\\Programming Projects\\Proj 3\\Bible.txt");
+        File hashes = new File("/Users/wes/Dropbox/Cedarville/2-Sophomore/Spring 2015/Computer Security/Programming Projects/Proj 3/pa3hashes.txt");
+        File dictionary = new File("/Users/wes/Dropbox/Cedarville/2-Sophomore/Spring 2015/Computer Security/Programming Projects/Proj 3/Bible.txt");
         try {
             DataBundle data = MD5crackerTools.parseHashFile(hashes);
             
