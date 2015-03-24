@@ -15,11 +15,14 @@ public class DataBundle {
         userNames = initUserNames;
         salts = initSalts;
         hashes = initHashes;
+        dataLength = initUserNames.length;
     }
     
     private final String[] userNames;
     private final String[] salts;
     private final String[] hashes;
+    private final int dataLength;
+    
     
     public String[] getAllUserNames() {
         return userNames;
@@ -38,5 +41,8 @@ public class DataBundle {
     }
     public String getHash(int i) {
         return hashes[i];
+    }
+    public int length() {
+        return dataLength;
     }
 }
