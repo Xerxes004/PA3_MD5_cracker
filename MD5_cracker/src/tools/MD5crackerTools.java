@@ -6,12 +6,42 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.Scanner;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 public class MD5crackerTools {
     
-    public static DataBundle fullAttack(File hashFile, File dictionary) 
+    public static String fullAttack(String hash, String salt, File dictionary) 
+            throws DictionaryNotFoundException,
+                   FileNotFoundException
+    {
+        String dictionaryResult = dictionaryAttack(hash, salt, dictionary);
+
+        if (dictionaryResult != null) {
+            return dictionaryResult;
+        }
+        
+        String bruteResult = bruteForceAttack(hash, salt);
+
+        if (bruteResult != null) {
+            return bruteResult;
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Uses a dictionary to attack an MD5-hashed password.
+     * @param passwordHash hash of password to attack
+     * @param passwordSalt salt of password to attack
+     * @param dictionary dictionary to use when attacking password
+     * @return String of password if found, null if not found
+     * @throws DictionaryNotFoundException
+     * @throws FileNotFoundException 
+     */
+    public static String dictionaryAttack
+        (String passwordHash, String passwordSalt, File dictionary) 
             throws DictionaryNotFoundException,
                    FileNotFoundException
     {
@@ -19,24 +49,28 @@ public class MD5crackerTools {
             throw new DictionaryNotFoundException();
         }
         
-        DataBundle uncrackedData = parseHashFile(hashFile);
+        Scanner dictionaryScanner = new Scanner(dictionary);
+        HashMap<String, String> map = new HashMap();
         
-        //  try brute force first
-        for (int i = 0; i < uncrackedData.length(); i++) {
-            String userName = uncrackedData.getUserName(i);
-            String salt = uncrackedData.getSalt(i);
-            String hash = uncrackedData.getHash(i);
+        while (dictionaryScanner.hasNext()) {
+            String nextWord = dictionaryScanner.next();
             
-            if (bruteForceAttack(hash, salt) != null) {
-                
+            for (int i = 0; i < nextWord.length(); i++) {
+                if (!Character.isLetterOrDigit(nextWord.charAt(i))) {
+                    nextWord = nextWord.substring(0, i + 1).toLowerCase().trim();
+                    map.put(nextWord, nextWord);
+                    break;
+                }
+            }
+            
+            String dictionaryWordHash = getMD5hashString(nextWord + passwordSalt);
+            
+            if (!map.containsKey(dictionaryWordHash)) {
+                if (dictionaryWordHash.equals(passwordHash)) {
+                    return nextWord;
+                }
             }
         }
-        
-        return null;
-    }
-    
-    public static String dictionaryAttack(String passwordHash, String passwordSalt, File dictionary) {
-        
         
         return null;
     }
@@ -71,13 +105,15 @@ public class MD5crackerTools {
             
             //  username:salt:MD5hash
             //  field[0]:field[1]:field[2]
-            userNames[i] = fields[0];
-            salts[i]     = fields[1];
-            MD5hashes[i] = fields[2];
-            
+            userNames[i] = fields[0].toLowerCase().trim();
+            salts[i]     = fields[1].toLowerCase().trim();
+            MD5hashes[i] = fields[2].toLowerCase().trim();
+            /*
             System.out.println("User: " + userNames[i]);
             System.out.println("Hash: " + salts[i]);
             System.out.println("Pass: " + MD5hashes[i]);
+            System.out.println("----------------------------------");
+            */
             
             i++;
         }

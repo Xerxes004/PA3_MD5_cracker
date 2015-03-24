@@ -23,7 +23,6 @@ public class DataBundle {
     private final String[] hashes;
     private final int dataLength;
     
-    
     public String[] getAllUserNames() {
         return userNames;
     }
