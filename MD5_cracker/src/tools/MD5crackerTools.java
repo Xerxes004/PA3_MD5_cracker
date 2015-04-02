@@ -287,4 +287,99 @@ public class MD5crackerTools {
             return null;
         }   
     }
+    
+    /**
+     * Hashes all possible passwords and stores them in a hash table
+     * to use in a forward search attack 
+     * @param dictionary
+     * @return A hashmap of all possible hashes
+     */
+    public static HashMap forwardSearch(File dictionary) throws FileNotFoundException, DictionaryNotFoundException {
+        final String[] possibleChars = {
+            "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q",
+            "r","s","t","u","v","w","x","y","z",
+            "0","1","2","3","4","5","6","7","8","9"
+        };
+        String password = "";
+        String hashedPassword;
+        HashMap<String, String> passwords = new HashMap();
+        for(int i = 0; i < possibleChars.length; i++) {
+            passwords.put(getMD5hashString(possibleChars[i]), possibleChars[i]);          
+        }
+        for (int i = 0; i < possibleChars.length; i++) {
+            for (int j = 0; j < possibleChars.length; j++) {
+                password = possibleChars[i] + possibleChars[j];
+                
+                hashedPassword = getMD5hashString(password);
+                passwords.put(hashedPassword, password);
+            }
+        }
+        
+        for (int i = 0; i < possibleChars.length; i++) {
+            for (int j = 0; j < possibleChars.length; j++) {
+                for (int k = 0; k < possibleChars.length; k++) {
+                    password = possibleChars[i] + possibleChars[j] + possibleChars[k];
+                    
+                    hashedPassword = getMD5hashString(password);
+                    passwords.put(hashedPassword, password);
+                }
+            }
+        }
+        
+        for (int i = 0; i < possibleChars.length; i++) {
+            for (int j = 0; j < possibleChars.length; j++) {
+                for (int k = 0; k < possibleChars.length; k++) {
+                    for (int l = 0; l < possibleChars.length; l++) {
+                        password = possibleChars[i] + possibleChars[j] + possibleChars[k] + possibleChars[l];
+                        
+                        hashedPassword = getMD5hashString(password);
+                        passwords.put(hashedPassword, password);
+                    }
+                }
+            }
+        }
+        
+        for (int i = 0; i < possibleChars.length; i++) {
+            for (int j = 0; j < possibleChars.length; j++) {
+                for (int k = 0; k < possibleChars.length; k++) {
+                    for (int l = 0; l < possibleChars.length; l++) {
+                        for (int m = 0; m < possibleChars.length; m++) {
+                            password = possibleChars[i] + possibleChars[j] + possibleChars[k] + possibleChars[l] +
+                                possibleChars[m];
+                            
+                            hashedPassword = getMD5hashString(password);
+                            passwords.put(hashedPassword, password);
+                        }
+                    }
+                }
+            }
+        } 
+        
+        if(dictionary == null){
+            throw new DictionaryNotFoundException();
+        }
+        
+        Scanner fileSearch = new Scanner(dictionary);
+        
+        while (fileSearch.hasNext()) {
+            String nextWord = fileSearch.next().toLowerCase().trim();
+
+            for (int i = 0; i < nextWord.length(); i++) {
+                if (!Character.isLetterOrDigit(nextWord.charAt(i))) {
+                    nextWord = nextWord.replace(nextWord.charAt(i), ' ');
+                }
+            }
+            nextWord = nextWord.toLowerCase().trim();
+
+
+            if (nextWord.length() > 5) {
+                hashedPassword = getMD5hashString(nextWord);
+
+                passwords.put(hashedPassword, nextWord);
+            }
+        }
+        
+        return passwords;
+        
+    }
 }
